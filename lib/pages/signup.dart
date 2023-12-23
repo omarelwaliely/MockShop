@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:mockshop/components/advance_button.dart';
 import 'package:mockshop/components/form_text_field.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignupPage> createState() => _SignupPageState();
 }
 
-class _LoginPageState extends State<LoginPage>
+class _SignupPageState extends State<SignupPage>
     with SingleTickerProviderStateMixin {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  final emailController = TextEditingController();
 
   late TabController tabController;
 
@@ -22,13 +23,11 @@ class _LoginPageState extends State<LoginPage>
     tabController = TabController(length: 2, vsync: this);
   }
 
-  void signin() {}
+  void signup() {}
 
-  void changeToSignUp(BuildContext context) {
-    Navigator.pushNamed(context, '/signup');
+  void changeToLogin(BuildContext context) {
+    Navigator.pushNamed(context, '/');
   }
-
-  void forgotPassword() {}
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +44,6 @@ class _LoginPageState extends State<LoginPage>
                   'lib/assets/logo.png',
                 ),
                 const SizedBox(height: 20),
-                Text("Welcome to MockShop!",
-                    style: TextStyle(
-                      color: Colors.grey[800],
-                      fontSize: 12,
-                    )),
-                const SizedBox(height: 20),
                 TabBar(
                   controller: tabController,
                   indicatorColor: Colors.black,
@@ -61,6 +54,12 @@ class _LoginPageState extends State<LoginPage>
                     Tab(text: "Customer"),
                     Tab(text: "Vendor"),
                   ],
+                ),
+                const SizedBox(height: 20),
+                FormTextField(
+                  hintText: 'Email',
+                  obscureText: false,
+                  controller: emailController,
                 ),
                 const SizedBox(height: 20),
                 FormTextField(
@@ -75,23 +74,8 @@ class _LoginPageState extends State<LoginPage>
                   controller: passwordController,
                 ),
                 const SizedBox(height: 20),
-                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 30),
-                    child: TextButton(
-                      onPressed: () => forgotPassword(),
-                      child: Text(
-                        "Forgot Password?",
-                        style: TextStyle(
-                          color: Colors.blue[800],
-                        ),
-                      ),
-                    ),
-                  ),
-                ]),
-                const SizedBox(height: 20),
                 AdvanceButton(
-                    displayText: "Sign In", onPressed: () => signin()),
+                    displayText: "Sign Up", onPressed: () => signup()),
                 const SizedBox(height: 20),
                 Row(
                   children: [
@@ -101,7 +85,7 @@ class _LoginPageState extends State<LoginPage>
                         color: Colors.grey[700],
                       ),
                     ),
-                    Text("Don't have an account yet?",
+                    Text("Already have an account?",
                         style: TextStyle(color: Colors.grey[700])),
                     Expanded(
                       child: Divider(
@@ -113,8 +97,8 @@ class _LoginPageState extends State<LoginPage>
                 ),
                 const SizedBox(height: 20),
                 AdvanceButton(
-                    displayText: "Sign Up",
-                    onPressed: () => changeToSignUp(context)),
+                    displayText: "Log In",
+                    onPressed: () => changeToLogin(context)),
               ],
             ),
           ),

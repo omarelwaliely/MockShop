@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/login.dart';
+import 'package:mockshop/pages/route_generator.dart';
 
 void main() {
   runApp(const MainApp());
@@ -11,7 +11,6 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: LoginPage(),
-    );
+        initialRoute: '/', onGenerateRoute: RouteGenerator.generateRoute);
   }
 }
