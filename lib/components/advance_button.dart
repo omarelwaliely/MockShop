@@ -14,13 +14,12 @@ class AdvanceButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      width: double.infinity, // Make the button stretch to the right
-      padding: const EdgeInsets.symmetric(
-          horizontal: 16.0), // Add padding around the button
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.black, // Set background color to black
+          backgroundColor: Colors.black,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
           ),

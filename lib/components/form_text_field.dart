@@ -12,11 +12,15 @@ class FormTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 25,
+      ),
       child: TextField(
         controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
+            isDense: true,
+            contentPadding: const EdgeInsets.all(10),
             enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white)),
             focusedBorder: OutlineInputBorder(

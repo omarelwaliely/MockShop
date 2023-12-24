@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mockshop/components/advance_button.dart';
 import 'package:mockshop/components/form_text_field.dart';
+import 'package:mockshop/services/api.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -14,6 +15,7 @@ class _SignupPageState extends State<SignupPage>
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
+  final nameController = TextEditingController();
 
   late TabController tabController;
 
@@ -23,7 +25,22 @@ class _SignupPageState extends State<SignupPage>
     tabController = TabController(length: 2, vsync: this);
   }
 
-  void signup() {}
+  void signup() {
+    String accountType;
+    if (tabController.index == 0) {
+      accountType = 'C';
+    } else {
+      accountType = 'V';
+    }
+    var data = {
+      "fullname": nameController.text,
+      "username": usernameController.text,
+      "password": passwordController.text,
+      "email": emailController.text,
+      "accounttype": accountType,
+    };
+    Api.createuser(data);
+  }
 
   void changeToLogin(BuildContext context) {
     Navigator.pushNamed(context, '/');
@@ -54,6 +71,12 @@ class _SignupPageState extends State<SignupPage>
                     Tab(text: "Customer"),
                     Tab(text: "Vendor"),
                   ],
+                ),
+                const SizedBox(height: 20),
+                FormTextField(
+                  hintText: 'Name',
+                  obscureText: false,
+                  controller: nameController,
                 ),
                 const SizedBox(height: 20),
                 FormTextField(
