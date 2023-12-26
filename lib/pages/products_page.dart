@@ -22,20 +22,7 @@ class _LoginPageState extends State<LoginPage>
     tabController = TabController(length: 2, vsync: this);
   }
 
-  void signin() {
-    String accountType;
-    if (tabController.index == 0) {
-      accountType = "C";
-    } else {
-      accountType = "V";
-    }
-    Map<String, String> credentials = {
-      'username': usernameController.text,
-      'password': passwordController.text,
-      'accounttype': accountType
-    };
-    Navigator.pushNamed(context, '/verify_user', arguments: credentials);
-  }
+  void signin() {}
 
   void changeToSignUp(BuildContext context) {
     Navigator.pushNamed(context, '/signup');

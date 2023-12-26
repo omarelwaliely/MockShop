@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:mockshop/pages/login.dart';
 import 'package:mockshop/pages/signup.dart';
+import 'package:mockshop/pages/verify_user.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments;
-    // case '/page':
-    // if(args is correctdatattypehere){
-    // return MaterialPageRoute(
-    //  builder: (_) => Page(
-    // data: args,
-    // ),
-    //);
-
-    // }
     switch (settings.name) {
       case '/':
-        return MaterialPageRoute(builder: (_) => LoginPage());
+        return MaterialPageRoute(builder: (_) => const LoginPage());
       case '/signup':
-        return MaterialPageRoute(builder: (_) => SignupPage());
+        return MaterialPageRoute(builder: (_) => const SignupPage());
+      case '/verify_user':
+        if (args is Map<String, String>) {
+          return MaterialPageRoute(
+            builder: (_) => VerifyUser(data: args),
+          );
+        } else {
+          return _errorRoute();
+        }
       default:
         return _errorRoute();
     }
