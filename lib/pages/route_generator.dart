@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mockshop/pages/add_products.dart';
+import 'package:mockshop/pages/edit_product.dart';
 import 'package:mockshop/pages/login.dart';
 import 'package:mockshop/pages/signup.dart';
 import 'package:mockshop/pages/verify_user.dart';
+import 'package:mockshop/pages/products_page.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -19,6 +22,12 @@ class RouteGenerator {
         } else {
           return _errorRoute();
         }
+      case '/add_products':
+        return MaterialPageRoute(builder: (_) => AddProducts());
+      case '/products_page':
+        return MaterialPageRoute(builder: (_) => const ProductsPage());
+      case '/edit_product':
+        return MaterialPageRoute(builder: (_) => EditProduct());
       default:
         return _errorRoute();
     }

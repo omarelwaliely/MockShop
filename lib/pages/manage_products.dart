@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mockshop/services/api.dart';
 
-class ProductsPage extends StatelessWidget {
-  const ProductsPage({super.key});
-
+class ManageProducts extends StatelessWidget {
+  const ManageProducts({super.key});
+  void editProduct() {}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,6 +19,8 @@ class ProductsPage extends StatelessWidget {
                 children: products.map<Widget>((product) {
                   return Row(
                     children: [
+                      TextButton(
+                          onPressed: editProduct, child: const Text('Edit')),
                       Text('Product Name: ${product.productName}'),
                       Text('Product Description: ${product.description}'),
                       Text('Product Price: ${product.price}'),
