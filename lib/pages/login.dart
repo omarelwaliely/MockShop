@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mockshop/components/advance_button.dart';
 import 'package:mockshop/components/form_text_field.dart';
+import 'package:mockshop/services/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,6 +15,8 @@ class _LoginPageState extends State<LoginPage>
     with SingleTickerProviderStateMixin {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+  var incorrect = false;
+  late SharedPreferences prefs;
 
   late TabController tabController;
 
@@ -20,21 +24,35 @@ class _LoginPageState extends State<LoginPage>
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
+    initSharedPref();
   }
 
-  void signin() {
-    String accountType;
-    if (tabController.index == 0) {
-      accountType = "C";
-    } else {
-      accountType = "V";
-    }
-    Map<String, String> credentials = {
+  void initSharedPref() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  Future<void> signin(BuildContext context) async {
+    String accountType = tabController.index == 0 ? "C" : "V";
+    var token = await Api.getuser({
       'username': usernameController.text,
       'password': passwordController.text,
       'accounttype': accountType
-    };
-    Navigator.pushNamed(context, '/verify_user', arguments: credentials);
+    });
+    if (token != "error") {
+      prefs.setString('token', token);
+      if (!context.mounted) return;
+      Navigator.pop(context);
+      if (accountType == 'C') {
+        Navigator.pushNamed(context, '/manage_products',
+            arguments: token); //fix
+      } else {
+        Navigator.pushNamed(context, '/manage_products', arguments: token);
+      }
+    } else {
+      setState(() {
+        incorrect = true;
+      });
+    }
   }
 
   void changeToSignUp(BuildContext context) {
@@ -88,6 +106,11 @@ class _LoginPageState extends State<LoginPage>
                   controller: passwordController,
                 ),
                 const SizedBox(height: 20),
+                if (incorrect)
+                  const Text(
+                    "Incorrect Login information, try again!",
+                    style: TextStyle(color: Colors.red),
+                  ),
                 Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 30),
@@ -104,7 +127,7 @@ class _LoginPageState extends State<LoginPage>
                 ]),
                 const SizedBox(height: 20),
                 AdvanceButton(
-                    displayText: "Sign In", onPressed: () => signin()),
+                    displayText: "Sign In", onPressed: () => signin(context)),
                 const SizedBox(height: 20),
                 Row(
                   children: [

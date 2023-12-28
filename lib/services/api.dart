@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:mockshop/model/user.dart';
+//import 'package:mockshop/model/user.dart';
 import 'package:mockshop/model/product.dart';
 
 class Api {
-  static const baseUrl = "http://172.20.10.2/api/";
+  static const baseUrl = "http://192.168.100.118/api/";
 
   static createuser(Map userdata) async {
     var url = Uri.parse("${baseUrl}create_user");
@@ -32,17 +32,18 @@ class Api {
       final res = await http.get(url);
       if (res.statusCode == 200) {
         var data = jsonDecode(res.body);
-        var user = User(
-            username: data['username'],
-            password: data['password'],
-            accountType: data['accounttype']);
-        return user;
+        if (data['status']) {
+          debugPrint("I am here");
+          return data['token'];
+        } else {
+          return "error";
+        }
       } else {
-        return User(username: "ERROR", password: "ERROR", accountType: "ERROR");
+        return "error";
       }
     } catch (e) {
       debugPrint(e.toString());
-      return User(username: "ERROR", password: "ERROR", accountType: "ERROR");
+      return "error";
     }
   }
 
@@ -63,6 +64,32 @@ class Api {
 
   static getallproducts() async {
     var url = Uri.parse("${baseUrl}get_all_products");
+    List<Product> products = [];
+    try {
+      final res = await http.get(url);
+      if (res.statusCode == 200) {
+        var data = jsonDecode(res.body);
+        data.forEach((value) {
+          products.add(Product(
+              id: value['id'].toString(),
+              productName: value['productname'],
+              description: value['description'],
+              price: value['productname'],
+              vendorName: value['vendorusername']));
+        });
+        return products;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return;
+    }
+  }
+
+  static getproductsof(vendorUsername) async {
+    var url = Uri.parse("${baseUrl}get_products_of")
+        .replace(queryParameters: {'vendorusername': vendorUsername});
     List<Product> products = [];
     try {
       final res = await http.get(url);

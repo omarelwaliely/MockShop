@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mockshop/pages/add_products.dart';
 import 'package:mockshop/pages/edit_product.dart';
 import 'package:mockshop/pages/login.dart';
+import 'package:mockshop/pages/manage_products.dart';
 import 'package:mockshop/pages/signup.dart';
 import 'package:mockshop/pages/verify_user.dart';
 import 'package:mockshop/pages/products_page.dart';
@@ -28,6 +29,13 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ProductsPage());
       case '/edit_product':
         return MaterialPageRoute(builder: (_) => EditProduct());
+      case '/manage_products':
+        if (args is String) {
+          return MaterialPageRoute(builder: (_) => ManageProducts(token: args));
+        } else {
+          debugPrint('Arg type of: ${args.runtimeType} is not correct');
+          return _errorRoute();
+        }
       default:
         return _errorRoute();
     }

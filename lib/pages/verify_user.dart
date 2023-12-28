@@ -19,7 +19,7 @@ class VerifyUser extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else {
           final user = snapshot.data;
-          return Text(user.accountType);
+          return Text(user);
         }
       },
     ));

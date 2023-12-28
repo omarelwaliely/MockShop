@@ -10,6 +10,9 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^1.1.2
+  shared_preferences:
+  jwt_decoder:
+  
 
 dev_dependencies:
   flutter_test:

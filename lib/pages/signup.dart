@@ -39,7 +39,12 @@ class _SignupPageState extends State<SignupPage>
       "email": emailController.text,
       "accounttype": accountType,
     };
-    Api.createuser(data);
+    try {
+      Api.createuser(data);
+      Navigator.pushNamed(context, '/products_page');
+    } catch (e) {
+      debugPrint("ERROR: $e");
+    }
   }
 
   void changeToLogin(BuildContext context) {
