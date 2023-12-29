@@ -38,13 +38,12 @@ class _LoginPageState extends State<LoginPage>
       'password': passwordController.text,
       'accounttype': accountType
     });
-    if (token != "error") {
+    if (token != null && token != "error") {
       prefs.setString('token', token);
       if (!context.mounted) return;
       Navigator.pop(context);
       if (accountType == 'C') {
-        Navigator.pushNamed(context, '/manage_products',
-            arguments: token); //fix
+        Navigator.pushNamed(context, '/products_page', arguments: token);
       } else {
         Navigator.pushNamed(context, '/manage_products', arguments: token);
       }

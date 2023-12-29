@@ -21,7 +21,7 @@ class MainApp extends StatelessWidget {
     } else {
       var decodedToken = JwtDecoder.decode(token);
       if (decodedToken['accounttype'] == 'C') {
-        return const ProductsPage();
+        return ProductsPage(token: token);
       } else {
         return ManageProducts(token: token);
       }

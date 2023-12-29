@@ -12,13 +12,18 @@ class Api {
     try {
       final res = await http.post(url, body: userdata);
       if (res.statusCode == 200) {
-        var data = jsonDecode(res.body.toString());
-        debugPrint(data.toString());
+        var data = jsonDecode(res.body);
+        if (data['status']) {
+          debugPrint(data['token']);
+          return data['token'];
+        }
       } else {
         debugPrint("Failed to get response");
+        return 'error';
       }
     } catch (e) {
       debugPrint(e.toString());
+      return 'error';
     }
   }
 
@@ -74,7 +79,7 @@ class Api {
               id: value['id'].toString(),
               productName: value['productname'],
               description: value['description'],
-              price: value['productname'],
+              price: value['price'] is num ? value['price'].toDouble() : null,
               vendorName: value['vendorusername']));
         });
         return products;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mockshop/model/product.dart';
 import 'package:mockshop/pages/add_products.dart';
 import 'package:mockshop/pages/edit_product.dart';
 import 'package:mockshop/pages/login.dart';
@@ -6,6 +7,7 @@ import 'package:mockshop/pages/manage_products.dart';
 import 'package:mockshop/pages/signup.dart';
 import 'package:mockshop/pages/verify_user.dart';
 import 'package:mockshop/pages/products_page.dart';
+import 'package:mockshop/pages/view_product.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -26,9 +28,21 @@ class RouteGenerator {
       case '/add_products':
         return MaterialPageRoute(builder: (_) => AddProducts());
       case '/products_page':
-        return MaterialPageRoute(builder: (_) => const ProductsPage());
+        if (args is String) {
+          return MaterialPageRoute(builder: (_) => ProductsPage(token: args));
+        } else {
+          debugPrint('Arg type of: ${args.runtimeType} is not correct');
+          return _errorRoute();
+        }
       case '/edit_product':
         return MaterialPageRoute(builder: (_) => EditProduct());
+      case '/view_product':
+        if (args is Product) {
+          return MaterialPageRoute(builder: (_) => ViewProduct(product: args));
+        } else {
+          debugPrint('Arg type of: ${args.runtimeType} is not correct');
+          return _errorRoute();
+        }
       case '/manage_products':
         if (args is String) {
           return MaterialPageRoute(builder: (_) => ManageProducts(token: args));

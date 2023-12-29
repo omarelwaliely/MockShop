@@ -28,13 +28,15 @@ function startServer() {
         const encrypted_pass = await bcrypt.hash(req.body.password.toString(), 10);
         req.body.password = encrypted_pass;
         let data = new UserModel(req.body);
-
         try {
-            let dataToStore = await data.save();
-            res.status(200).json(dataToStore);
+            data.save();
+            const tokenData = { "_id": data._id, "email": data.email, "accounttype": data.accounttype }
+            const token = jwt.sign(tokenData, secret, { expiresIn: '1h' });
+            res.status(200).json({ status: true, token });
         } catch (e: any) {
             res.status(400).json({
-                status: e.message,
+                status: false,
+                message: e.message
             });
         }
     });

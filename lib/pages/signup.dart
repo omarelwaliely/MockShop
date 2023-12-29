@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mockshop/components/advance_button.dart';
 import 'package:mockshop/components/form_text_field.dart';
 import 'package:mockshop/services/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -12,6 +13,7 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage>
     with SingleTickerProviderStateMixin {
+  late SharedPreferences prefs;
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
@@ -23,9 +25,14 @@ class _SignupPageState extends State<SignupPage>
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
+    initSharedPref();
   }
 
-  void signup() {
+  void initSharedPref() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  void signup() async {
     String accountType;
     if (tabController.index == 0) {
       accountType = 'C';
@@ -40,8 +47,16 @@ class _SignupPageState extends State<SignupPage>
       "accounttype": accountType,
     };
     try {
-      Api.createuser(data);
-      Navigator.pushNamed(context, '/products_page');
+      var token = await Api.createuser(data);
+      if (!context.mounted) return;
+      if (token != null && token != 'error') {
+        prefs.setString('token', token);
+        if (accountType == 'C') {
+          Navigator.pushNamed(context, '/products_page', arguments: token);
+        } else {
+          Navigator.pushNamed(context, '/manage_products', arguments: token);
+        }
+      }
     } catch (e) {
       debugPrint("ERROR: $e");
     }
