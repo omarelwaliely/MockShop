@@ -9,7 +9,6 @@ class Validator {
         return decodedToken;
       }
     } else {
-      Navigator.pushReplacementNamed(context, '/login');
       return null;
     }
   }

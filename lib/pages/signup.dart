@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mockshop/components/advance_button.dart';
 import 'package:mockshop/components/form_text_field.dart';
+import 'package:mockshop/components/form_text_field_with_icon.dart';
 import 'package:mockshop/services/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,10 +19,16 @@ class _SignupPageState extends State<SignupPage>
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
   final nameController = TextEditingController();
+  var hidePassword = true;
   String errorText = '';
   var fails = false;
 
   late TabController tabController;
+  void hideTrigger() {
+    setState(() {
+      hidePassword = !hidePassword;
+    });
+  }
 
   @override
   void initState() {
@@ -145,9 +152,10 @@ class _SignupPageState extends State<SignupPage>
                   controller: usernameController,
                 ),
                 const SizedBox(height: 20),
-                FormTextField(
+                FormTextFieldWithIcon(
+                  hideTrigger: () => hideTrigger(),
                   hintText: 'Password',
-                  obscureText: true,
+                  obscureText: hidePassword,
                   controller: passwordController,
                 ),
                 const SizedBox(height: 7),

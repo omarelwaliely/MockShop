@@ -36,6 +36,11 @@ class _AddProductsState extends State<AddProducts> {
     }
   }
 
+  void goBack(BuildContext context) {
+    Navigator.pop(context);
+    Navigator.pushNamed(context, '/manage_products', arguments: widget.token);
+  }
+
   @override
   void initState() {
     vendor = Validator.validateVendor(context, widget.token);
@@ -46,40 +51,54 @@ class _AddProductsState extends State<AddProducts> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[400],
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Image.asset(
-            'lib/assets/logo.png',
-            height: 100,
-          ),
-          const SizedBox(height: 20),
-          ProductTextField(
-            controller: productNameController,
-            hintText: "Product Name",
-            length: 30,
-            lines: 1,
-          ),
-          ProductTextField(
-            controller: productDescriptionController,
-            hintText: "Product Description",
-            length: 300,
-            lines: 1,
-          ),
-          ProductTextField(
-            controller: productPriceController,
-            hintText: "Product Price",
-            length: 20,
-            lines: 1,
-          ),
-          const SizedBox(height: 20),
-          AdvanceButtonColored(
-            displayText: "Add Product",
-            onPressed: () => addProductToStore(context),
-            color: Colors.green, // Use the same color as EditProduct
-          ),
-        ],
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                  onPressed: () => goBack(context),
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+            Image.asset(
+              'lib/assets/logo.png',
+              height: 100,
+            ),
+            const SizedBox(height: 50),
+            ProductTextField(
+              controller: productNameController,
+              hintText: "Product Name",
+              length: 30,
+              lines: 1,
+            ),
+            ProductTextField(
+              controller: productDescriptionController,
+              hintText: "Product Description",
+              length: 300,
+              lines: 1,
+            ),
+            ProductTextField(
+              controller: productPriceController,
+              hintText: "Product Price",
+              length: 20,
+              lines: 1,
+            ),
+            const SizedBox(height: 20),
+            AdvanceButtonColored(
+              displayText: "Add Product",
+              onPressed: () => addProductToStore(context),
+              color: Colors.green, // Use the same color as EditProduct
+            ),
+          ],
+        ),
       ),
     );
   }
