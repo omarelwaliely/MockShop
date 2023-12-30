@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-//import 'package:mockshop/model/user.dart';
 import 'package:mockshop/model/product.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Api {
   static const baseUrl = "http://192.168.100.118/api/";
@@ -17,6 +17,8 @@ class Api {
           debugPrint(data['token']);
           return data['token'];
         }
+      } else if (res.statusCode == 505) {
+        return 'exists';
       } else {
         debugPrint("Failed to get response");
         return 'error';
@@ -38,7 +40,6 @@ class Api {
       if (res.statusCode == 200) {
         var data = jsonDecode(res.body);
         if (data['status']) {
-          debugPrint("I am here");
           return data['token'];
         } else {
           return "error";
@@ -50,6 +51,11 @@ class Api {
       debugPrint(e.toString());
       return "error";
     }
+  }
+
+  static logoutuser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
   }
 
   static addproduct(Map productdata) async {
@@ -76,7 +82,7 @@ class Api {
         var data = jsonDecode(res.body);
         data.forEach((value) {
           products.add(Product(
-              id: value['id'].toString(),
+              id: value['_id'].toString(),
               productName: value['productname'],
               description: value['description'],
               price: value['price'] is num ? value['price'].toDouble() : null,
@@ -102,10 +108,10 @@ class Api {
         var data = jsonDecode(res.body);
         data.forEach((value) {
           products.add(Product(
-              id: value['id'].toString(),
+              id: value['_id'].toString(),
               productName: value['productname'],
               description: value['description'],
-              price: value['productname'],
+              price: value['price'] is num ? value['price'].toDouble() : null,
               vendorName: value['vendorusername']));
         });
         return products;
@@ -113,8 +119,32 @@ class Api {
         return [];
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("ERROR: ${e.toString()}");
       return;
+    }
+  }
+
+  static getproduct(id) async {
+    var url =
+        Uri.parse("${baseUrl}get_product").replace(queryParameters: {'id': id});
+    try {
+      final res = await http.get(url);
+      if (res.statusCode == 200) {
+        var data = jsonDecode(res.body);
+        var product = Product(
+            id: data['_id'].toString(),
+            productName: data['productname'],
+            description: data['description'],
+            price: data['price'] is num ? data['price'].toDouble() : null,
+            vendorName: data['vendorusername']);
+        return product;
+      } else {
+        debugPrint('product not found');
+        return null;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return null;
     }
   }
 

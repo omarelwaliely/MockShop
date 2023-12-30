@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mockshop/services/api.dart';
 
+//This is a dummy page I used to test an api
+
 class VerifyUser extends StatelessWidget {
   final Map<String, String> data;
   const VerifyUser({required this.data, super.key});

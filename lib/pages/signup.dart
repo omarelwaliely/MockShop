@@ -18,6 +18,8 @@ class _SignupPageState extends State<SignupPage>
   final passwordController = TextEditingController();
   final emailController = TextEditingController();
   final nameController = TextEditingController();
+  String errorText = '';
+  var fails = false;
 
   late TabController tabController;
 
@@ -34,10 +36,33 @@ class _SignupPageState extends State<SignupPage>
 
   void signup() async {
     String accountType;
+    bool isEmailValid = RegExp(
+      r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",
+    ).hasMatch(emailController.text);
     if (tabController.index == 0) {
       accountType = 'C';
     } else {
       accountType = 'V';
+    }
+    if (emailController.text == '' ||
+        passwordController.text == '' ||
+        usernameController.text == '' ||
+        nameController.text == '') {
+      setState(() {
+        fails = true;
+        errorText = 'Please fill all fields';
+      });
+      return;
+    } else if (!isEmailValid) {
+      setState(() {
+        fails = true;
+        errorText = 'Please enter a valid email address';
+      });
+      return;
+    } else {
+      setState(() {
+        fails = false;
+      });
     }
     var data = {
       "fullname": nameController.text,
@@ -49,8 +74,17 @@ class _SignupPageState extends State<SignupPage>
     try {
       var token = await Api.createuser(data);
       if (!context.mounted) return;
-      if (token != null && token != 'error') {
+      if (token != null && (token != 'error')) {
+        if (token == 'exists') {
+          setState(() {
+            fails = true;
+            errorText = 'The Username or Email already exists!';
+          });
+          return;
+        }
+        Navigator.pop(context);
         prefs.setString('token', token);
+        if (!context.mounted) return;
         if (accountType == 'C') {
           Navigator.pushNamed(context, '/products_page', arguments: token);
         } else {
@@ -63,7 +97,7 @@ class _SignupPageState extends State<SignupPage>
   }
 
   void changeToLogin(BuildContext context) {
-    Navigator.pushNamed(context, '/');
+    Navigator.pushNamed(context, '/login');
   }
 
   @override
@@ -116,7 +150,13 @@ class _SignupPageState extends State<SignupPage>
                   obscureText: true,
                   controller: passwordController,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 7),
+                if (fails)
+                  Text(
+                    errorText,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                const SizedBox(height: 7),
                 AdvanceButton(
                     displayText: "Sign Up", onPressed: () => signup()),
                 const SizedBox(height: 20),

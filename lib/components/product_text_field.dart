@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 class ProductTextField extends StatelessWidget {
   final dynamic controller;
   final String hintText;
+  final dynamic length;
+  final dynamic lines;
   const ProductTextField(
-      {super.key, required this.controller, required this.hintText});
+      {super.key,
+      required this.length,
+      this.lines,
+      required this.controller,
+      required this.hintText});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -12,6 +18,8 @@ class ProductTextField extends StatelessWidget {
         horizontal: 25,
       ),
       child: TextField(
+        maxLines: lines,
+        maxLength: length,
         controller: controller,
         decoration: InputDecoration(
             isDense: true,

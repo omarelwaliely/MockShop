@@ -24,13 +24,20 @@ function startServer() {
     app.use(express.urlencoded({ extended: true }));
 
     app.post("/api/create_user", async (req: Request, res: Response) => {
-        console.log("Request Body:", req.body);
+        if (await UserModel.findOne({ username: req.body.username }) || await UserModel.findOne({ email: req.body.email })) {
+            res.status(505).json({
+                status: false,
+                message: "Username or Email already exists!"
+            });
+            console.log('here')
+            return;
+        }
         const encrypted_pass = await bcrypt.hash(req.body.password.toString(), 10);
         req.body.password = encrypted_pass;
         let data = new UserModel(req.body);
         try {
             data.save();
-            const tokenData = { "_id": data._id, "email": data.email, "accounttype": data.accounttype }
+            const tokenData = { "_id": data._id, "email": data.email, "username": data.username, "accounttype": data.accounttype }
             const token = jwt.sign(tokenData, secret, { expiresIn: '1h' });
             res.status(200).json({ status: true, token });
         } catch (e: any) {
@@ -50,7 +57,7 @@ function startServer() {
             const user = await UserModel.findOne({ username, accounttype });
 
             if (user && await bcrypt.compare(password.toString(), user.password)) {
-                const tokenData = { "_id": user._id, "email": user.email, "accounttype": user.accounttype }
+                const tokenData = { "_id": user._id, "username": user.username, "email": user.email, "accounttype": user.accounttype }
                 const token = jwt.sign(tokenData, secret, { expiresIn: '1h' });
                 res.status(200).json({ status: true, token });
             }
@@ -98,8 +105,22 @@ function startServer() {
         } catch (e: any) {
             res.status(500).json({ error: e.message });
         }
-
     })
+    app.get("/api/get_product", async (req: Request, res: Response) => {
+        try {
+            const id = req.query.id;
+            const product = await ProductModel.findById(id);
+            console.log(product);
+            if (product) {
+                res.status(200).json(product);
+            }
+            else {
+                res.status(404).json({ error: 'product not found' });
+            }
+        } catch (e: any) {
+            res.status(500).json({ error: e.message });
+        }
+    });
     app.listen(2000, () => {
         console.log("Connected to server on port 2000");
     });
