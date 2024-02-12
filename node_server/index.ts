@@ -2,8 +2,10 @@ import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import UserModel from "./schemas/user";
 import ProductModel from "./schemas/product";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+var bcrypt = require('bcryptjs');
+
+//reformat to multiple files, middleware to verify, add headers, env (mongo stuff too)
 
 async function connectToDatabase() {
     try {

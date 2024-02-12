@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
 interface ProductData {
-    vendorusername: string;
+    vendorusername: string; //change to id
     productname: string;
     description: string;
     price: number;

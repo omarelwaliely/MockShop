@@ -5,7 +5,7 @@ import 'package:mockshop/model/product.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Api {
-  static const baseUrl = "http://192.168.100.118/api/";
+  static const baseUrl = "http://10.40.57.8:2000/api/";
 
   static createuser(Map userdata) async {
     var url = Uri.parse("${baseUrl}create_user");
