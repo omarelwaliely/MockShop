@@ -4,12 +4,14 @@ import UserModel from "./schemas/user";
 import ProductModel from "./schemas/product";
 import jwt from "jsonwebtoken";
 var bcrypt = require('bcryptjs');
-
-//reformat to multiple files, middleware to verify, add headers, env (mongo stuff too)
+require('dotenv').config()
+const env = process.env
+//questions is this a good practice or not (putting exclamation points since im sure of the env variables), dotenv?
+//reformat to multiple files, middleware to verify, add headers
 
 async function connectToDatabase() {
     try {
-        await mongoose.connect("mongodb+srv://omarelwaliely:omaradmin123@cluster0.ow7tz0m.mongodb.net/mockapp", {
+        await mongoose.connect(env.MONGOCONNECT!, {
         });
         console.log("Connected to mongoose");
     } catch (error) {
@@ -20,8 +22,7 @@ async function connectToDatabase() {
 
 function startServer() {
     const app = express();
-    const secret = "H*Jq>NcX8qkZkZA";//im manually putting the key here but typically id store it in env, since env would be pushed to my github for demo purposes ill just manually put it here
-
+    const secret = env.SECRET!;
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
 
@@ -124,7 +125,7 @@ function startServer() {
         }
     });
     app.listen(2000, () => {
-        console.log("Connected to server on port 2000");
+        console.log("Connected to server on port " + env.PORT);
     });
     app.put('/api/update_product', async (req: Request, res: Response) => { //im using put here so you should update the entire product
         try {
