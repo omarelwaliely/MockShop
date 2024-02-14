@@ -25,7 +25,7 @@ function startServer() {
     app.use(express.urlencoded({ extended: true }));
     app.use(productRoute);
     app.use(userRoute);
-    app.listen(2000, () => {
+    app.listen(env.PORT, () => {
         console.log("Connected to server on port " + env.PORT);
     });
 }
