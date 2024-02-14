@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import mongoose from "mongoose";
 import productRoute from "./routes/product.router"
 import userRoute from "./routes/user.router"
@@ -6,7 +6,7 @@ import userRoute from "./routes/user.router"
 require('dotenv').config()
 const env = process.env
 //questions is this a good practice or not (putting exclamation points since im sure of the env variables), dotenv?
-//reformat to multiple files, add headers, middleware to verify,
+//add headers, middleware to verify, find by id not username
 
 async function connectToDatabase() {
     try {
