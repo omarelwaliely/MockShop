@@ -12,7 +12,6 @@ export async function createUser(req: Request, res: Response) {
             status: false,
             message: "Username or Email already exists!"
         });
-        console.log('here')
         return;
     }
     console.log(req.body.password)

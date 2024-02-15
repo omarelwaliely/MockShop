@@ -5,6 +5,7 @@ export async function addProduct(req: Request, res: Response) {
     let data = new ProductModel(req.body);
     try {
         let dataToStore = await data.save();
+        console.log(dataToStore)
         res.status(200).json(dataToStore);
     }
     catch (e: any) {
@@ -29,7 +30,8 @@ export async function getAllProducts(req: Request, res: Response) {
 export async function getProductsOf(req: Request, res: Response) {
     try {
         var vendorid = req.query.vendorid;
-        const products = await ProductModel.find({ vendorid });
+        const products = await ProductModel.find({ "vendorid": vendorid });
+        console.log(products)
         if (products) {
             res.status(200).json(products);
         } else {

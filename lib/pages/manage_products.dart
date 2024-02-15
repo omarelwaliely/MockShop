@@ -44,7 +44,7 @@ class _ManageProductsState extends State<ManageProducts> {
       backgroundColor: Colors.grey[400],
       body: FutureBuilder(
         future: vendor != null
-            ? Api.getproductsof(vendor['username'])
+            ? Api.getproductsof(vendor['_id'])
             : Future.value(["ERROR"]),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (!snapshot.hasData) {

@@ -61,7 +61,8 @@ class Api {
   static addproduct(Map productdata) async {
     var url = Uri.parse("${baseUrl}add_product");
     try {
-      final res = await http.post(url, body: productdata);
+      final res =
+          await http.post(url, body: productdata, headers: await getHeaders());
       if (res.statusCode == 200) {
         var data = jsonDecode(res.body.toString());
         debugPrint(data.toString());
@@ -89,7 +90,8 @@ class Api {
               productName: value['productname'],
               description: value['description'],
               price: value['price'] is num ? value['price'].toDouble() : null,
-              vendorName: value['vendorusername']));
+              vendorName: value['vendorusername'],
+              vendorId: value['vendorid']));
         });
         return products;
       } else {
@@ -101,9 +103,9 @@ class Api {
     }
   }
 
-  static getproductsof(vendorUsername) async {
+  static getproductsof(vendorId) async {
     var url = Uri.parse("${baseUrl}get_products_of")
-        .replace(queryParameters: {'vendorusername': vendorUsername});
+        .replace(queryParameters: {'vendorid': vendorId});
     List<Product> products = [];
     try {
       final res = await http.get(
@@ -118,7 +120,8 @@ class Api {
               productName: value['productname'],
               description: value['description'],
               price: value['price'] is num ? value['price'].toDouble() : null,
-              vendorName: value['vendorusername']));
+              vendorName: value['vendorusername'],
+              vendorId: value['vendorid']));
         });
         return products;
       } else {
@@ -145,7 +148,8 @@ class Api {
             productName: data['productname'],
             description: data['description'],
             price: data['price'] is num ? data['price'].toDouble() : null,
-            vendorName: data['vendorusername']);
+            vendorName: data['vendorusername'],
+            vendorId: data['vendorid']);
         return product;
       } else {
         debugPrint('product not found');

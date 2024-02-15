@@ -22,6 +22,7 @@ class _AddProductsState extends State<AddProducts> {
   void addProductToStore(BuildContext context) async {
     if (vendor != null) {
       await Api.addproduct({
+        'vendorid': vendor['_id'],
         'vendorusername': vendor['username'],
         'productname': productNameController.text,
         'description': productDescriptionController.text,

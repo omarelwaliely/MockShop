@@ -5,6 +5,7 @@ class Validator {
   static validateVendor(BuildContext context, dynamic token) {
     if (token != null && !JwtDecoder.isExpired(token)) {
       var decodedToken = JwtDecoder.decode(token);
+      debugPrint(decodedToken.toString());
       if (decodedToken['accounttype'] == 'V') {
         return decodedToken;
       }

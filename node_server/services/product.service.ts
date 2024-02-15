@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import UserModel from '../schemas/user'
-import jwt, { decode } from 'jsonwebtoken';
-import { jwtDecode } from "jwt-decode";
+import jwt, { JwtPayload } from 'jsonwebtoken';
 require('dotenv').config()
 const env = process.env
 
@@ -29,9 +28,7 @@ export const verifyTokenVendor = async (req: Request, res: Response, next: NextF
     }
 
     try {
-        jwt.verify(token, env.SECRET!);
-        const decodedToken = decode(token) ?? ''
-        console.log(decodedToken)
+        const decodedToken = jwt.verify(token, env.SECRET!) as JwtPayload;
         if (decodedToken['accounttype'] == 'V') {
             const user = await UserModel.findOne({ "_id": decodedToken['_id'] });
             if (!user) {
@@ -55,8 +52,7 @@ export const verifyTokenCustomer = async (req: Request, res: Response, next: Nex
     }
 
     try {
-        jwt.verify(token, env.SECRET!);
-        const decodedToken = decode(token) ?? ''
+        const decodedToken = jwt.verify(token, env.SECRET!) as JwtPayload;
         if (decodedToken['accounttype'] == 'C') {
             const user = await UserModel.findOne({ "_id": decodedToken['_id'] });
             if (!user) {

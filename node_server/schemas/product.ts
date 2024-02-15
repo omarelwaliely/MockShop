@@ -1,7 +1,8 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
 
 interface ProductData {
-    vendorusername: string; //change to id
+    vendorusername: string;
+    vendorid: string; //change to id
     productname: string;
     description: string;
     price: number;
@@ -9,6 +10,10 @@ interface ProductData {
 
 const dataSchema: Schema<ProductData & Document> = new Schema({
     vendorusername: {
+        required: true,
+        type: String,
+    },
+    vendorid: {
         required: true,
         type: String,
     },
