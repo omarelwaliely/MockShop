@@ -15,6 +15,7 @@ export async function createUser(req: Request, res: Response) {
         console.log('here')
         return;
     }
+    console.log(req.body.password)
     const encrypted_pass = await bcrypt.hash(req.body.password.toString(), 10);
     req.body.password = encrypted_pass;
     let data = new UserModel(req.body);

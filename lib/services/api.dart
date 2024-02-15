@@ -77,7 +77,10 @@ class Api {
     var url = Uri.parse("${baseUrl}get_all_products");
     List<Product> products = [];
     try {
-      final res = await http.get(url);
+      final res = await http.get(
+        url,
+        headers: await getHeaders(),
+      );
       if (res.statusCode == 200) {
         var data = jsonDecode(res.body);
         data.forEach((value) {
@@ -103,7 +106,10 @@ class Api {
         .replace(queryParameters: {'vendorusername': vendorUsername});
     List<Product> products = [];
     try {
-      final res = await http.get(url);
+      final res = await http.get(
+        url,
+        headers: await getHeaders(),
+      );
       if (res.statusCode == 200) {
         var data = jsonDecode(res.body);
         data.forEach((value) {
@@ -128,7 +134,10 @@ class Api {
     var url =
         Uri.parse("${baseUrl}get_product").replace(queryParameters: {'id': id});
     try {
-      final res = await http.get(url);
+      final res = await http.get(
+        url,
+        headers: await getHeaders(),
+      );
       if (res.statusCode == 200) {
         var data = jsonDecode(res.body);
         var product = Product(
@@ -153,7 +162,11 @@ class Api {
         .replace(queryParameters: {'id': id});
     debugPrint(url.toString());
     try {
-      final res = await http.put(url, body: newProduct);
+      final res = await http.put(
+        url,
+        body: newProduct,
+        headers: await getHeaders(),
+      );
       if (res.statusCode == 200) {
         var data = jsonDecode(res.body);
         debugPrint(data.toString());
@@ -171,7 +184,10 @@ class Api {
         .replace(queryParameters: {'id': id});
     debugPrint(url.toString());
     try {
-      final res = await http.delete(url);
+      final res = await http.delete(
+        url,
+        headers: await getHeaders(),
+      );
       if (res.statusCode == 200) {
         var data = jsonDecode(res.body);
         debugPrint(data.toString());
@@ -182,5 +198,10 @@ class Api {
       debugPrint("ERROR: ${e.toString()}");
       return;
     }
+  }
+
+  static Future<Map<String, String>> getHeaders() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return {'Authorization': prefs.getString('token') ?? ''};
   }
 }
