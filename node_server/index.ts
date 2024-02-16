@@ -5,8 +5,7 @@ import userRoute from "./routes/user.router"
 
 require('dotenv').config()
 const env = process.env
-//questions is this a good practice or not (putting exclamation points since im sure of the env variables), dotenv?
-//add headers, middleware to verify, find by id not username
+//questions is this a good practice or not (putting exclamation points since im sure of the env variables), dotenv?, no name best practice?
 
 async function connectToDatabase() {
     try {
